@@ -41,6 +41,8 @@ public class SendEmail {
     }
 
     public static void send(String toEmail, String content) {
+        System.out.println("邮件内容:" + content);
+
         try {
 
             //创建一个配置文件并保存
@@ -88,14 +90,13 @@ public class SendEmail {
             mimeMessage.setSubject("知识管理系统KMS");
 
             //邮件内容
-            mimeMessage.setContent("您好!", "text/html;charset=UTF-8");
+            mimeMessage.setContent(content, "text/html;charset=UTF-8");
 
             //发送邮件
             transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
 
             //关闭连接
             transport.close();
-            System.out.println("邮件发送成功");
 
         } catch (Exception mex) {
             mex.printStackTrace();
