@@ -125,7 +125,7 @@ public class FileNewController {
 				public void run() {
 					try {
 						fileInfoService.translateFile(uuid);
-					} catch (IOException e) {
+					} catch (Exception e) {
 						LOG.error(uuid + "文件处理失败");
 					}
 				};
@@ -140,9 +140,6 @@ public class FileNewController {
 
 	/**
 	 * 新建文档保存
-	 * 
-	 * @param model
-	 * @return
 	 */
 	@RequestMapping(value = "/newfile/save", method = RequestMethod.POST)
 	public @ResponseBody JsonResult newFileSave(String fileName, String content, HttpSession session) {
@@ -226,9 +223,6 @@ public class FileNewController {
 
 	/**
 	 * 自动关联
-	 * 
-	 * @param mainFileId
-	 * @return
 	 */
 	@RequestMapping(value = "/auto-relation/{uuid}", method = RequestMethod.POST)
 	public @ResponseBody JsonResult<Integer> autoRelations(@PathVariable("uuid") String uuid) {

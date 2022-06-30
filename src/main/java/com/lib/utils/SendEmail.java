@@ -1,98 +1,105 @@
 package com.lib.utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
-import java.util.Properties;
+import com.lib.enums.Const;
+import com.sun.mail.util.MailSSLSocketFactory;
 
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
-import com.lib.enums.Const;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 /**
- * 
  * @author Liou CZ
  */
 public class SendEmail {
 
-	public static String HOST = null;
-	public static String PROTOCOL = "smtp";
-	public static int PORT = 0;
-	public static String FROM = null;// 发件人的email
-	public static String PWD = null;// 发件人密码
-	
+    public static String HOST = null;
+    public static String PROTOCOL = "smtp";
+    public static int PORT = 0;
+    public static String FROM = null;// 发件人的email
+    public static String PWD = null;// 发件人密码
 
-	static {
-		Properties prop = new Properties();
-		InputStream in = Const.class.getResourceAsStream("/jdbc.properties");
-		try {
-			prop.load(in);
-			HOST = prop.getProperty("mail_host").trim();
-			PORT = Integer.valueOf(prop.getProperty("mail_port"));
-			FROM = prop.getProperty("mail_user").trim();
-			PWD = prop.getProperty("mail_pwd").trim();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
-	public static void main(String[] args) {
-		send("13574472507@163.com", "test");
-	}
+    static {
+        Properties prop = new Properties();
+        InputStream in = Const.class.getResourceAsStream("/jdbc.properties");
+        try {
+            prop.load(in);
+            HOST = prop.getProperty("mail_host").trim();
+            PORT = Integer.valueOf(prop.getProperty("mail_port"));
+            FROM = prop.getProperty("mail_user").trim();
+            PWD = prop.getProperty("mail_pwd").trim();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	/**
-	 * 获取Session
-	 * 
-	 * @return
-	 */
-	private static Session getSession() {
-		Properties props = new Properties();
-		props.put("mail.smtp.host", HOST);// 设置服务器地址
-		props.put("mail.store.protocol", PROTOCOL);// 设置协议
-		props.put("mail.smtp.port", PORT);// 设置端口
-		props.put("mail.smtp.auth", true);
+    public static void main(String[] args) {
+        send("universsky@163.com", "test");
+    }
 
-		Authenticator authenticator = new Authenticator() {
+    public static void send(String toEmail, String content) {
+        try {
 
-			@Override
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(FROM, PWD);
-			}
+            //创建一个配置文件并保存
+            Properties properties = new Properties();
 
-		};
-		Session session = Session.getDefaultInstance(props, authenticator);
+            properties.setProperty("mail.host", "smtp.163.com");
 
-		return session;
-	}
+            properties.setProperty("mail.transport.protocol", "smtp");
 
-	public static void send(String toEmail, String content) {
-		Session session = getSession();
-		try {
-			// System.out.println("--send--"+content);
-			// Instantiate a message
-			Message msg = new MimeMessage(session);
+            properties.setProperty("mail.smtp.auth", "true");
 
-			// Set message attributes
-			msg.setFrom(new InternetAddress(FROM));
-			InternetAddress[] address = { new InternetAddress(toEmail) };
-			msg.setRecipients(Message.RecipientType.TO, address);
-			msg.setSubject("SOKLIB知识库管理系统账号激活邮件");
-			msg.setSentDate(new Date());
-			msg.setContent(content, "text/html;charset=utf-8");
+            //设置SSL加密
+            MailSSLSocketFactory sf = new MailSSLSocketFactory();
+            sf.setTrustAllHosts(true);
+            properties.put("mail.smtp.ssl.enable", "true");
+            properties.put("mail.smtp.ssl.socketFactory", sf);
 
-			// Send the message
-			Transport.send(msg);
-		} catch (MessagingException mex) {
-			mex.printStackTrace();
-		}
-	}
+            //创建一个session对象
+            Session session = Session.getDefaultInstance(properties, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(FROM, PWD);
+                }
+            });
+
+            //开启debug模式
+            session.setDebug(true);
+
+            //获取连接对象
+            Transport transport = session.getTransport();
+
+            //连接服务器
+            transport.connect(HOST, FROM, PWD);
+
+            //创建邮件对象
+            MimeMessage mimeMessage = new MimeMessage(session);
+
+            //邮件发送人
+            mimeMessage.setFrom(new InternetAddress(FROM));
+
+            //邮件接收人
+            mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+
+            //邮件标题
+            mimeMessage.setSubject("知识管理系统KMS");
+
+            //邮件内容
+            mimeMessage.setContent("您好!", "text/html;charset=UTF-8");
+
+            //发送邮件
+            transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
+
+            //关闭连接
+            transport.close();
+            System.out.println("邮件发送成功");
+
+        } catch (Exception mex) {
+            mex.printStackTrace();
+        }
+    }
 
 }

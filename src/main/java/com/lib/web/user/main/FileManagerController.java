@@ -119,7 +119,6 @@ public class FileManagerController {
 	/**
 	 * 是否解压文件
 	 * 
-	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "/tog-compress", method = RequestMethod.POST)
@@ -184,7 +183,7 @@ public class FileManagerController {
 							public void run() {
 								try {
 									fileInfoService.translateFile(fuuid);
-								} catch (IOException e) {
+								} catch (Exception e) {
 									LOG.error(fuuid + "文件处理失败");
 								}
 							};
@@ -222,7 +221,7 @@ public class FileManagerController {
 				public void run() {
 					try {
 						fileInfoService.translateFile(uuid);
-					} catch (IOException e) {
+					} catch (Exception e) {
 						LOG.error(uuid + "文件处理失败");
 					}
 				};

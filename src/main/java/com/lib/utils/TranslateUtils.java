@@ -26,7 +26,7 @@ public class TranslateUtils {
 
 	public static OfficeConvert getOfficeConvert() {
 		org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration config = new org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration();
-		config.setOfficeHome("C:\\Program Files (x86)\\OpenOffice 4\\");
+		config.setOfficeHome("/Applications/OpenOffice.app/Contents");
 		// OpenOffice安装路径
 		config.setPortNumber(8100);
 		// 启动服务端口号
@@ -51,17 +51,17 @@ public class TranslateUtils {
 	 * @param outputFile
 	 * @return
 	 */
-	public static boolean processFLV(String filePath, String outPath) {
+	public static boolean processFLV(String inputFile, String outputFile) {
 
 		// System.out.println("abcd");
-		File file = new File(filePath);
+		File file = new File(inputFile);
 		if (!file.exists()) {
 
-			System.out.println("路径[" + filePath + "]对应的视频文件不存在!");
+			System.out.println("路径[" + inputFile + "]对应的视频文件不存在!");
 
 		}
 		// System.out.println("1234");
-		File outfile = new File(outPath);
+		File outfile = new File(outputFile);
 		if (outfile.exists()) {
 			//System.out.println("flv文件已经存在！无需转换");
 			return true;
@@ -72,7 +72,7 @@ public class TranslateUtils {
 			// 低精度
 			commend.add(Const.CONTAINER_PATH + "resource/ffmpeg/ffmpeg.exe");
 			commend.add("-i");
-			commend.add(filePath);
+			commend.add(inputFile);
 			
 			commend.add("-ab");
 			commend.add("56");
@@ -98,7 +98,7 @@ public class TranslateUtils {
 			commend.add("10");
 			
 			commend.add("-y");
-			commend.add(outPath);
+			commend.add(outputFile);
 			StringBuffer test = new StringBuffer();
 			for (int i = 0; i < commend.size(); i++)
 				test.append(commend.get(i) + " ");

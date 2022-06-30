@@ -11,7 +11,7 @@ public interface ClassificationService {
 	
 	/**
 	 * 添加分类
-	 * @param c
+	 * @param name
 	 * @param parentId
 	 * @return
 	 */
@@ -20,7 +20,6 @@ public interface ClassificationService {
 	/**
 	 * 添加分类
 	 * @param c
-	 * @param parentId
 	 * @return
 	 */
 	int insert(Classification c);
@@ -62,7 +61,7 @@ public interface ClassificationService {
 
 	/**
 	 * 查找所有的孩子节点
-	 * @param classificationId
+	 * @param classIds
 	 * @return
 	 */
 	List<List<Classification>> findAllChildById(String classIds);
@@ -93,6 +92,6 @@ public interface ClassificationService {
 	 * @param path
 	 * @return 
 	 */
-	int updatePicPath(Classification c);
+	int updatePicPath(Classification path);
 	
 }

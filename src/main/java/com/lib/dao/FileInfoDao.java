@@ -51,7 +51,7 @@ public interface FileInfoDao {
 	/**
 	 * 得到为处理过的文件
 	 * 
-	 * @param i
+	 * @param fileState
 	 * @return
 	 */
 	List<FileInfo> getFilesByState(Integer fileState);
@@ -59,7 +59,7 @@ public interface FileInfoDao {
 	/**
 	 * 通过uuid得到一个文件
 	 * 
-	 * @param uuid
+	 * @param fileUuid
 	 * @return
 	 */
 	List<FileInfoVO> getFileInfoByUuid(String fileUuid);
@@ -67,7 +67,7 @@ public interface FileInfoDao {
 	/**
 	 * 通过fileId得到一个文件
 	 * 
-	 * @param uuid
+	 * @param fileId
 	 * @return
 	 */
 	FileInfo getFileInfoByFileId(Long fileId);
@@ -84,7 +84,7 @@ public interface FileInfoDao {
 	 * 修改文件后缀名
 	 * 
 	 * @param fileId
-	 * @param fileExe
+	 * @param fileExt
 	 */
 	void modifyFileExeById(@Param("fileId") Long fileId, @Param("fileExt") String fileExt);
 
@@ -92,8 +92,6 @@ public interface FileInfoDao {
 	 * 得到为处理过的文件
 	 * 
 	 * @param searchValue
-	 * 
-	 * @param i
 	 * @return
 	 */
 	List<FileInfoVO> getFilesByUserId(@Param("userId") Long userId, @Param("searchValue") String searchValue);
@@ -101,9 +99,7 @@ public interface FileInfoDao {
 	/**
 	 * 得到一个子节点所有的共有文件
 	 * 
-	 * @param searchValue
-	 * 
-	 * @param i
+	 * @param ids
 	 * @return
 	 */
 	List<FileInfoVO> getAllChildFiles(List<Classification> ids);
@@ -128,7 +124,7 @@ public interface FileInfoDao {
 	/**
 	 * 得到所有文档
 	 * 
-	 * @param string
+	 * @param searchValue
 	 * @return
 	 */
 	List<FileInfoVO> getFiles(String searchValue);
@@ -159,8 +155,6 @@ public interface FileInfoDao {
 	/**
 	 * 获得近期点击率最高的文档
 	 * 
-	 * @param date
-	 * @param date2
 	 * @return
 	 */
 	List<FileInfoVO> getRecentHotFile();

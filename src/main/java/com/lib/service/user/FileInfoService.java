@@ -37,7 +37,7 @@ public interface FileInfoService {
 	 * 
 	 * @param uuid
 	 */
-	void translateFile(String uuid) throws IOException;
+	void translateFile(String uuid) throws IOException, InterruptedException;
 
 	/**
 	 * 根据uuid查找一个文件

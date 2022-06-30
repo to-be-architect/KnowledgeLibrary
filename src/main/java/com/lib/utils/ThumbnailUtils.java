@@ -24,7 +24,7 @@ import com.lib.enums.Const;
  */
 public class ThumbnailUtils {
 
-	public static void pdfGetThumb(String path, String filePath) {
+	public static void pdfGetThumb(String path, String filePath) throws InterruptedException {
 		// TODO Auto-generated method stub
 		Document document = new Document();
 

@@ -88,7 +88,7 @@ public class FileInfoServiceImpl implements FileInfoService {
 	}
 
 	@Override
-	public void translateFile(String uuid) throws IOException {
+	public void translateFile(String uuid) throws IOException, InterruptedException {
 		// 设置文件问后台处理中
 		fileinfoDao.setFileStateByUuid(uuid, 3);
 		FileInfo file = getFileInfoByUuid(uuid);
