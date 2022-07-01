@@ -21,10 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lib.dto.FileInfoVO;
-import com.lib.dto.JsonResult;
+import com.lib.dto.JSONResult;
 import com.lib.entity.Classification;
-import com.lib.entity.UserInfo;
 import com.lib.enums.Const;
 import com.lib.service.user.FileManageService;
 
@@ -110,13 +108,14 @@ public class CommonController {
 	 * @return
 	 */
 	@RequestMapping(value = "/child-file-class/{fileClassId}", method = RequestMethod.GET)
-	public @ResponseBody JsonResult<List<Classification>> getChildFileClass(
+	public @ResponseBody
+    JSONResult<List<Classification>> getChildFileClass(
 			@PathVariable("fileClassId") Long fileClassId) {
-		JsonResult<List<Classification>> jr = null;
+		JSONResult<List<Classification>> jr = null;
 		List<Classification> list = fileManageService.getClassificationByParentId(fileClassId);
 		Classification c = fileManageService.getClassificationById(fileClassId);
 		list.add(0, c);
-		jr = new JsonResult<List<Classification>>(true, list);
+		jr = new JSONResult<List<Classification>>(true, list);
 		return jr;
 	}
 
@@ -128,11 +127,12 @@ public class CommonController {
 	 * @return
 	 */
 	@RequestMapping(value = "/child-file-class-all/{fileClassId}", method = RequestMethod.GET)
-	public @ResponseBody JsonResult<List<Classification>> getAllChildFileClass(
+	public @ResponseBody
+    JSONResult<List<Classification>> getAllChildFileClass(
 			@PathVariable("fileClassId") Long fileClassId) {
-		JsonResult<List<Classification>> jr = null;
+		JSONResult<List<Classification>> jr = null;
 		List<Classification> list = fileManageService.getAllChildClassesById(fileClassId);
-		jr = new JsonResult<List<Classification>>(true, list);
+		jr = new JSONResult<List<Classification>>(true, list);
 		return jr;
 	}
 	

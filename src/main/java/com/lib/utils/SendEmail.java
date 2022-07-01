@@ -10,9 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-/**
- * @author Liou CZ
- */
 public class SendEmail {
 
     public static String HOST = null;

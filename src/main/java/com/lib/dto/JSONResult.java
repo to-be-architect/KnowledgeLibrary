@@ -3,17 +3,17 @@ package com.lib.dto;
 /**
  * Description:封装Json结果
  */
-public class JsonResult<T> {
+public class JSONResult<T> {
     private boolean success;
     private T data;
     private String error;
 
-    public JsonResult(boolean success, T data) {
+    public JSONResult(boolean success, T data) {
         this.success = success;
         this.data = data;
     }
 
-    public JsonResult(boolean success,String error) {
+    public JSONResult(boolean success, String error) {
         this.success = success;
         this.error = error;
     }

@@ -37,7 +37,7 @@ public interface UserInfoDao {
 	/**
 	 * 根据Email查询一个用户的信息
 	 * 
-	 * @param id
+	 * @param userEmail
 	 * @return
 	 */
 	UserInfo queryByEmail(@Param("userEmail") String userEmail);

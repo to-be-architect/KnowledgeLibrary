@@ -1,13 +1,9 @@
 package com.lib.web.user.main;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.cassandra.thrift.Cassandra.system_add_column_family_args;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.druid.support.logging.Log;
 import com.github.pagehelper.PageInfo;
 import com.lib.dto.FileInfoVO;
 import com.lib.dto.ForkFileInfoVo;
@@ -26,11 +21,9 @@ import com.lib.dto.ForkFileInfoVo;
 import com.lib.dto.LuceneSearchVo;
 import com.lib.dto.PageVo;
 
-import com.lib.dto.JsonResult;
-import com.lib.entity.DocInfo;
+import com.lib.dto.JSONResult;
 
 import com.lib.entity.FileInfo;
-import com.lib.entity.ForkInfo;
 import com.lib.entity.UserInfo;
 import com.lib.enums.Const;
 import com.lib.service.admin.ClassificationService;
@@ -71,10 +64,11 @@ public class MyResourceController {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@RequestMapping(value = "/file-del/{fileId}", method = RequestMethod.POST)
-	public @ResponseBody JsonResult delMyfile(HttpSession session, @PathVariable("fileId") Long fileId) {
+	public @ResponseBody
+    JSONResult delMyfile(HttpSession session, @PathVariable("fileId") Long fileId) {
 
 		UserInfo user = (UserInfo) session.getAttribute(Const.SESSION_USER);
-		JsonResult jr = null;
+		JSONResult jr = null;
 		new Thread() {
 			public void run() {
 				try {
@@ -89,7 +83,7 @@ public class MyResourceController {
 			};
 		}.start();
 
-		jr = new JsonResult(true, "删除成功");
+		jr = new JSONResult(true, "删除成功");
 		return jr;
 	}
 

@@ -7,7 +7,7 @@ public interface UserRegisterService {
 		 * 处理注册 
 		 * @param email
 		 */
-		public void processregister(String userName,String userPassword,String email,String url);
+		public void processRegister(String userName, String userPassword, String email, String url);
 		/**
 		 * 处理激活 
 		 * @param email

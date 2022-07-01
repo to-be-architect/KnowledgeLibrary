@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lib.dto.JsonResult;
+import com.lib.dto.JSONResult;
 import com.lib.enums.Const;
 
 /**
@@ -98,7 +98,8 @@ public class SystemController {
 	}
 
 	@RequestMapping(value = "/log/now", method = RequestMethod.GET)
-	public @ResponseBody JsonResult<List<String>> getLogNow() {
+	public @ResponseBody
+    JSONResult<List<String>> getLogNow() {
 		String date = org.apache.tools.ant.util.DateUtils.format(new Date(), "yyyy-MM-dd");
 		String path = Const.ROOT_PATH + "logs/" + date + ".log";
 		List<String> list = new ArrayList<String>();
@@ -149,7 +150,7 @@ public class SystemController {
 			}
 		}
 		Collections.reverse(list);
-		JsonResult<List<String>> res = new JsonResult<List<String>>(true, list);
+		JSONResult<List<String>> res = new JSONResult<List<String>>(true, list);
 		return res;
 	}
 
@@ -239,9 +240,7 @@ public class SystemController {
 	}
 
 	public static void main(String[] args) throws IOException {
-		// System.out.println("D:\\\\soklib\\red5-server\\red5.bat");
-		// run.exec("D:\\\\soklib\\red5-server\\red5.bat");
-		Process p = Runtime.getRuntime().exec("cmd /d D://soklib/red5-server/red5.bat");
+		Process p = Runtime.getRuntime().exec("cmd ./soklib/red5-server/red5.bat");
 		p.exitValue();
 
 	}

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.lib.dto.FileInfoVO;
-import com.lib.dto.JsonResult;
+import com.lib.dto.JSONResult;
 import com.lib.entity.FileInfo;
 import com.lib.entity.UserInfo;
 import com.lib.enums.Const;
@@ -83,7 +83,8 @@ public class ManageController {
 	// }
 
 	@RequestMapping(value = "/user-manage", method = RequestMethod.GET)
-	public @ResponseBody JsonResult<List<FileInfo>> test() {
+	public @ResponseBody
+    JSONResult<List<FileInfo>> test() {
 
 		return null;
 	}

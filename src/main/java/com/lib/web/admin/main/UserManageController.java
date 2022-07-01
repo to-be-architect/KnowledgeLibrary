@@ -4,23 +4,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lib.dto.JsonResult;
+import com.lib.dto.JSONResult;
 import com.lib.entity.MessageInfo;
 import com.lib.entity.UserInfo;
 import com.lib.service.user.MessageService;
 import com.lib.service.user.UserService;
-import com.lib.utils.PagedResult;
 import com.lib.utils.StringValueUtil;
 
 @Controller
@@ -46,21 +42,21 @@ public class UserManageController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/remove-user", method ={ RequestMethod.POST,RequestMethod.GET})
-	public JsonResult removeUser(Long userId){
-		JsonResult jsonResult = null;
+	public JSONResult removeUser(Long userId){
+		JSONResult jsonResult = null;
 		boolean flag = userService.deleteUserByUserId(userId);
 		if(flag){
-			jsonResult = new JsonResult(true, "success");
+			jsonResult = new JSONResult(true, "success");
 			jsonResult.setData("success");
 		}
 		else
-			jsonResult = new JsonResult(false, "error");
+			jsonResult = new JSONResult(false, "error");
 		return jsonResult;
 	}
 	@ResponseBody
 	@RequestMapping(value = "/remove-userList", method ={ RequestMethod.POST,RequestMethod.GET})
-	public JsonResult removeUserList(String userList){
-		JsonResult jsonResult = null;
+	public JSONResult removeUserList(String userList){
+		JSONResult jsonResult = null;
 		try{
 		String users[] = userList.split("A");
 		List<Long>list = new ArrayList<Long>();
@@ -74,10 +70,10 @@ public class UserManageController {
 		for(i = 0;i<list.size();i++){
 			userService.deleteUserByUserId(list.get(i));
 		}
-			jsonResult = new JsonResult(true, "success");
+			jsonResult = new JSONResult(true, "success");
 			jsonResult.setData("success");
 		}catch (Exception e) {
-			jsonResult = new JsonResult(false, "error");
+			jsonResult = new JSONResult(false, "error");
 		}
 		return jsonResult;
 	}
@@ -89,8 +85,8 @@ public class UserManageController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/send-msg", method ={ RequestMethod.POST,RequestMethod.GET})
-	public JsonResult sendMessage(Long userId,String msgTitle,String msgContent){
-		JsonResult jsonResult = null;
+	public JSONResult sendMessage(Long userId, String msgTitle, String msgContent){
+		JSONResult jsonResult = null;
 		try{
 			MessageInfo msg = new MessageInfo();
 			msg.setMsgTitle(msgTitle);
@@ -99,10 +95,10 @@ public class UserManageController {
 			msg.setUserId(userId);
 			msg.setMsgTime(new Date());
 			msgService.insertMsg(msg);
-			jsonResult = new JsonResult(true, "success");
+			jsonResult = new JSONResult(true, "success");
 			jsonResult.setData("success");
 		}catch(Exception e){
-			jsonResult = new JsonResult(true, "error");
+			jsonResult = new JSONResult(true, "error");
 		}
 		return jsonResult;
 	}
@@ -113,32 +109,32 @@ public class UserManageController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/refresh-userpwd", method ={ RequestMethod.POST,RequestMethod.GET})
-	public JsonResult refreshUserPassword(Long userId){
-		JsonResult jsonResult = null;
+	public JSONResult refreshUserPassword(Long userId){
+		JSONResult jsonResult = null;
 		try{
 			UserInfo user = userService.getUserAllInfo(userId);
 			user.setUserPassword(StringValueUtil.getMD5("12345"));
 			 userService.updateUserPwd(user);
-			jsonResult = new JsonResult(true, "success");
+			jsonResult = new JSONResult(true, "success");
 			jsonResult.setData("success");
 		}catch(Exception e){
-			jsonResult = new JsonResult(false, "error");
+			jsonResult = new JSONResult(false, "error");
 		}
 		return jsonResult;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/change-usertype", method ={ RequestMethod.POST,RequestMethod.GET})
-	public JsonResult changeUserType(Long userId,Integer userType){
-		JsonResult jsonResult = null;
+	public JSONResult changeUserType(Long userId, Integer userType){
+		JSONResult jsonResult = null;
 		try{
 			UserInfo user = userService.getUserAllInfo(userId);
 			user.setUserType(userType);
 			 userService.updateUserType(user);
-			jsonResult = new JsonResult(true, "success");
+			jsonResult = new JSONResult(true, "success");
 			jsonResult.setData("success");
 		}catch(Exception e){
-			jsonResult = new JsonResult(false, "error");
+			jsonResult = new JSONResult(false, "error");
 		}
 		return jsonResult;
 	}

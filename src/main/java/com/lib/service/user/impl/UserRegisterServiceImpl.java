@@ -29,9 +29,6 @@ public class UserRegisterServiceImpl implements UserRegisterService {
     public void updateEmail(UserInfo user) {
         userInfoDao.updateUserEmail(user);// 更新email
         UserRegister ur = userRegisterDao.queryById(user.getUserId());
-        /// 如果处于安全，可以将激活码处理的更复杂点，这里我稍做简单处理
-        // user.setValidateCode(MD5Tool.MD5Encrypt(email));
-        // user.setValidateCode(MD5Util.encode2hex(email));
         String validateCode = MD5Util.encode2hex(user.getUserEmail());
         LOG.error("validateCode={}", validateCode);
 
@@ -59,7 +56,7 @@ public class UserRegisterServiceImpl implements UserRegisterService {
     /**
      * 处理注册
      */
-    public void processregister(String userName, String userPassword, String email, String url) {
+    public void processRegister(String userName, String userPassword, String email, String url) {
         UserInfo user = new UserInfo();
         user.setUserName(userName);
         user.setUserPassword(StringValueUtil.getMD5(userPassword));
@@ -67,11 +64,8 @@ public class UserRegisterServiceImpl implements UserRegisterService {
         user.setUserType(2);
         userInfoDao.insertUserNoStatus(user);// 保存用户信息
         UserRegister ur = new UserRegister();
-        UserInfo user2 = userInfoDao.queryByEmail(email);
-        ur.setUserId(user2.getUserId());
-        /// 如果处于安全，可以将激活码处理的更复杂点，这里我稍做简单处理
-        // user.setValidateCode(MD5Tool.MD5Encrypt(email));
-        // user.setValidateCode(MD5Util.encode2hex(email));
+        UserInfo userRecord = userInfoDao.queryByEmail(email);
+        ur.setUserId(userRecord.getUserId());
         ur.setValidateCode(MD5Util.encode2hex(email));
         ur.setRegisterTime(new Date());
         userRegisterDao.insertNoStatus(ur);
@@ -104,9 +98,10 @@ public class UserRegisterServiceImpl implements UserRegisterService {
     /**
      * 处理激活
      *
-     * @throws ParseException
+     * @param email        邮箱地址
+     * @param validateCode 激活码
+     * @throws Exception
      */
-    /// 传递激活码和email过来
     public void processActivate(String email, String validateCode) throws Exception {
         // 数据访问层，通过email获取用户信息
         UserInfo user = userInfoDao.queryByEmail(email);
@@ -118,7 +113,6 @@ public class UserRegisterServiceImpl implements UserRegisterService {
                 /// 没激活
                 Date currentTime = new Date();// 获取当前时间
                 // 验证链接是否过期
-                currentTime.before(ur.getRegisterTime());
                 if (currentTime.before(ur.getLastActivateTime())) {
                     // 验证激活码是否正确
                     if (validateCode.equals(ur.getValidateCode())) {
@@ -127,9 +121,6 @@ public class UserRegisterServiceImpl implements UserRegisterService {
                         // 设置默认头像
                         String photoUuid = StringValueUtil.getUUID();
                         user.setUserPhoto(photoUuid);
-                        FileUtils.copyFile(new File(Const.ROOT_PATH + "defaultfile/user-no.png"), new File(
-                                Const.ROOT_PATH + "users/" + user.getUserId() + "/photo/" + photoUuid + ".png"));
-
                         userInfoDao.updateUserNoStatus(user);
                         userRegisterDao.updateNoStatus(ur);
                     } else {

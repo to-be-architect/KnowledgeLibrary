@@ -1,17 +1,10 @@
 package com.lib.web.user.main;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.antlr.grammar.v3.ANTLRv3Parser.alternative_return;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import com.github.pagehelper.PageInfo;
 import com.lib.dto.FileInfoVO;
-import com.lib.dto.ForkFileInfoVo;
-import com.lib.dto.JsonResult;
+import com.lib.dto.JSONResult;
 import com.lib.entity.Classification;
 import com.lib.entity.DocInfo;
-import com.lib.entity.FileInfo;
 import com.lib.entity.ForkInfo;
 import com.lib.entity.UserInfo;
 import com.lib.enums.Const;
@@ -39,8 +29,6 @@ import com.lib.service.admin.ClassificationService;
 import com.lib.service.user.DocInfoService;
 import com.lib.service.user.FileInfoService;
 import com.lib.service.user.ForkInfoService;
-import com.lib.utils.JudgeUtils;
-import com.lib.utils.StringValueUtil;
 
 /**
  * 专门处理文件的Controller
@@ -114,10 +102,11 @@ public class FileContentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/findAllByUserId", method = RequestMethod.GET)
-	public @ResponseBody JsonResult findAllByUserId(HttpSession session) {
+	public @ResponseBody
+    JSONResult findAllByUserId(HttpSession session) {
 
 		UserInfo user = (UserInfo) session.getAttribute(Const.SESSION_USER);
-		JsonResult jr = new JsonResult(true, "暂存成功");
+		JSONResult jr = new JSONResult(true, "暂存成功");
 		List<DocInfo> docInfos = docInfoService.findAllByUserId(Long.valueOf(user.getUserId()));
 		if (docInfos.size() == 0) {
 			docInfoService.insert("常用收藏", user.getUserId());
@@ -134,9 +123,10 @@ public class FileContentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/insertDoc", method = RequestMethod.POST)
-	public @ResponseBody JsonResult insertDoc(String docName, HttpSession session) {
+	public @ResponseBody
+    JSONResult insertDoc(String docName, HttpSession session) {
 		UserInfo user = (UserInfo) session.getAttribute(Const.SESSION_USER);
-		JsonResult jr = new JsonResult(true, "添加成功");
+		JSONResult jr = new JSONResult(true, "添加成功");
 		List<DocInfo> docInfos = docInfoService.findAllByUserId(user.getUserId());
 		for (DocInfo d : docInfos) {
 			if (d.getDocName().equals(docName)) {
@@ -158,9 +148,10 @@ public class FileContentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/deleteDoc", method = RequestMethod.POST)
-	public @ResponseBody JsonResult deleteDoc(Long docId, HttpSession session) {
+	public @ResponseBody
+    JSONResult deleteDoc(Long docId, HttpSession session) {
 		UserInfo user = (UserInfo) session.getAttribute(Const.SESSION_USER);
-		JsonResult jr = new JsonResult(true, "删除成功");
+		JSONResult jr = new JSONResult(true, "删除成功");
 		docInfoService.delete(docId);
 		return jr;
 	}
@@ -173,9 +164,10 @@ public class FileContentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/insertFork", method = RequestMethod.POST)
-	public @ResponseBody JsonResult insertFork(ForkInfo forkInfo, HttpSession session) {
+	public @ResponseBody
+    JSONResult insertFork(ForkInfo forkInfo, HttpSession session) {
 		UserInfo user = (UserInfo) session.getAttribute(Const.SESSION_USER);
-		JsonResult jr = new JsonResult(true, "收藏成功");
+		JSONResult jr = new JSONResult(true, "收藏成功");
 		forkInfoService.insert(forkInfo);
 		Long forkId = forkInfoService.findByFileId(forkInfo.getFileId(), user.getUserId()).getForkId();
 		jr.setData(forkId);
@@ -190,9 +182,10 @@ public class FileContentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/judgeFork", method = RequestMethod.POST)
-	public @ResponseBody JsonResult judgeFork(ForkInfo forkInfo, HttpSession session) {
+	public @ResponseBody
+    JSONResult judgeFork(ForkInfo forkInfo, HttpSession session) {
 		UserInfo user = (UserInfo) session.getAttribute(Const.SESSION_USER);
-		JsonResult jr = new JsonResult(true, "未收藏");
+		JSONResult jr = new JSONResult(true, "未收藏");
 		List<ForkInfo> forkInfos = forkInfoService.findByDocId(user.getUserId());
 
 		for (ForkInfo f : forkInfos) {
@@ -216,8 +209,9 @@ public class FileContentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/modifyFork", method = RequestMethod.POST)
-	public @ResponseBody JsonResult modifyFork(ForkInfo forkInfo, HttpSession session) {
-		JsonResult jr = new JsonResult(true, "修改成功");
+	public @ResponseBody
+    JSONResult modifyFork(ForkInfo forkInfo, HttpSession session) {
+		JSONResult jr = new JSONResult(true, "修改成功");
 		forkInfoService.modify(forkInfo);
 		return jr;
 	}
@@ -230,8 +224,9 @@ public class FileContentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/deleteFork", method = RequestMethod.POST)
-	public @ResponseBody JsonResult deleteFork(Long forkId, HttpSession session) {
-		JsonResult jr = new JsonResult(true, "删除成功");
+	public @ResponseBody
+    JSONResult deleteFork(Long forkId, HttpSession session) {
+		JSONResult jr = new JSONResult(true, "删除成功");
 		forkInfoService.delete(forkId);
 		return jr;
 	}
@@ -244,8 +239,9 @@ public class FileContentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAllClass", method = RequestMethod.POST)
-	public @ResponseBody JsonResult getAllClass(String classIds) {
-		JsonResult jr = new JsonResult(true, "获取成功");
+	public @ResponseBody
+    JSONResult getAllClass(String classIds) {
+		JSONResult jr = new JSONResult(true, "获取成功");
 		List<List<Classification>> vo = classificationService.findAllChildById(classIds);
 		jr.setData(vo);
 		return jr;
@@ -259,8 +255,9 @@ public class FileContentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getOneClass", method = RequestMethod.POST)
-	public @ResponseBody JsonResult getOneClass(Long classId) {
-		JsonResult jr = new JsonResult(true, "获取成功");
+	public @ResponseBody
+    JSONResult getOneClass(Long classId) {
+		JSONResult jr = new JSONResult(true, "获取成功");
 		List<Classification> vo = classificationService.findOneChildById(classId);
 		jr.setData(vo);
 		return jr;

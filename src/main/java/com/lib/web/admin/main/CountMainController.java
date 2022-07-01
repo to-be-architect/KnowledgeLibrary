@@ -1,10 +1,7 @@
 package com.lib.web.admin.main;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,9 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.lib.dto.ActiveUserInfo;
 import com.lib.dto.ClassesClickInfo;
 import com.lib.dto.ClickInfo;
-import com.lib.dto.JsonResult;
+import com.lib.dto.JSONResult;
 import com.lib.entity.FileInfo;
-import com.lib.entity.UserInfo;
 import com.lib.service.admin.CountService;
 
 /**
@@ -50,13 +46,13 @@ public class CountMainController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/count/hot-file", method = RequestMethod.GET)
-	public JsonResult< List<ClickInfo>> getHotFiles(){
-		JsonResult< List<ClickInfo>> jr = null;
+	public JSONResult< List<ClickInfo>> getHotFiles(){
+		JSONResult< List<ClickInfo>> jr = null;
 		try{
 			 List<ClickInfo> fileList = countService.getHotFiles();
-			jr = new JsonResult< List<ClickInfo>>(true, fileList);
+			jr = new JSONResult< List<ClickInfo>>(true, fileList);
 		}catch (Exception e) {
-			jr = new JsonResult< List<ClickInfo>>(false, "获取失败");
+			jr = new JSONResult< List<ClickInfo>>(false, "获取失败");
 		}
 		return jr;
 	}
@@ -66,13 +62,13 @@ public class CountMainController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/count/hot-classes", method = RequestMethod.GET)
-	public JsonResult< List<ClassesClickInfo>> getHotClasses(){
-		JsonResult< List<ClassesClickInfo>> jr = null;
+	public JSONResult< List<ClassesClickInfo>> getHotClasses(){
+		JSONResult< List<ClassesClickInfo>> jr = null;
 		try{
 			 List<ClassesClickInfo> classesClickInfos = countService.getHotClass(1);
-			jr = new JsonResult< List<ClassesClickInfo>>(true, classesClickInfos);
+			jr = new JSONResult< List<ClassesClickInfo>>(true, classesClickInfos);
 		}catch (Exception e) {
-			jr = new JsonResult< List<ClassesClickInfo>>(false, "获取失败");
+			jr = new JSONResult< List<ClassesClickInfo>>(false, "获取失败");
 		}
 		return jr;
 	}
@@ -82,13 +78,13 @@ public class CountMainController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/count/active-user", method = RequestMethod.GET)
-	public JsonResult< List<ActiveUserInfo>> getActiveUsers(){
-		JsonResult< List<ActiveUserInfo>> jr = null;
+	public JSONResult< List<ActiveUserInfo>> getActiveUsers(){
+		JSONResult< List<ActiveUserInfo>> jr = null;
 		try{
 			 List<ActiveUserInfo> classesClickInfos = countService.getActiveUsers(1);
-			jr = new JsonResult< List<ActiveUserInfo>>(true, classesClickInfos);
+			jr = new JSONResult< List<ActiveUserInfo>>(true, classesClickInfos);
 		}catch (Exception e) {
-			jr = new JsonResult< List<ActiveUserInfo>>(false, "获取失败");
+			jr = new JSONResult< List<ActiveUserInfo>>(false, "获取失败");
 		}
 		return jr;
 	}
@@ -98,14 +94,14 @@ public class CountMainController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/count/recent-files", method = RequestMethod.GET)
-	public JsonResult< List<Long>> getRecentUploadFiles(){
-		JsonResult< List<Long>> jr = null;
+	public JSONResult< List<Long>> getRecentUploadFiles(){
+		JSONResult< List<Long>> jr = null;
 		try{
 			 List<Long> list = countService.getUploadTimesByTime();
 			 Collections.reverse(list);//倒序排列
-			jr = new JsonResult< List<Long>>(true, list);
+			jr = new JSONResult< List<Long>>(true, list);
 		}catch (Exception e) {
-			jr = new JsonResult< List<Long>>(false, "获取失败");
+			jr = new JSONResult< List<Long>>(false, "获取失败");
 		}
 		return jr;
 	}
@@ -115,15 +111,15 @@ public class CountMainController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/recommend", method = {RequestMethod.POST,RequestMethod.GET})
-	public JsonResult< List<FileInfo>> recommend(Long userId){
-		JsonResult< List<FileInfo>> jr = null;
+	public JSONResult< List<FileInfo>> recommend(Long userId){
+		JSONResult< List<FileInfo>> jr = null;
 		int recomNum = 2;
 		try{
 			 List<FileInfo> list = countService.getFileScoreList(userId, recomNum);
 			 System.out.println(list);
-			jr = new JsonResult< List<FileInfo>>(true, list);
+			jr = new JSONResult< List<FileInfo>>(true, list);
 		}catch (Exception e) {
-			jr = new JsonResult< List<FileInfo>>(false, "获取失败");
+			jr = new JSONResult< List<FileInfo>>(false, "获取失败");
 		}
 		return jr;
 	}
@@ -133,14 +129,14 @@ public class CountMainController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/count/click-times", method = RequestMethod.GET)
-	public JsonResult< List<Long>> getClickTims(){
-		JsonResult< List<Long>> jr = null;
+	public JSONResult< List<Long>> getClickTims(){
+		JSONResult< List<Long>> jr = null;
 		try{
 			 List<Long> list = countService.getClickTimesByTime();
 			 Collections.reverse(list);//倒序排列
-			jr = new JsonResult< List<Long>>(true, list);
+			jr = new JSONResult< List<Long>>(true, list);
 		}catch (Exception e) {
-			jr = new JsonResult< List<Long>>(false, "获取失败");
+			jr = new JSONResult< List<Long>>(false, "获取失败");
 		}
 		return jr;
 	}
